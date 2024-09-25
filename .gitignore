@@ -32,3 +32,4 @@ build/
 
 # Ignore the outputs
 *.csv  # Ignore CSV files (unless you want to track specific CSVs)
+.env
