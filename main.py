@@ -6,8 +6,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from selenium import webdriver
 from bs4 import BeautifulSoup
-# from google.colab import userdata
-# userdata.get('TICKETMASTER_API_KEY')
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from the .env file (API key)
+load_dotenv()
+
+
 
 # Setup Chrome options for Selenium
 chrome_options = webdriver.ChromeOptions()
@@ -58,9 +63,12 @@ vogue_df = pd.DataFrame(vogue_data)
 vogue_df.to_csv('vogue_data.csv', index=False)
 print("Vogue data saved to 'vogue_data.csv'.")
 
-# Fetching Ticketmaster Events using API
-API_KEY = "Yao6zdvTSiHjfUwDOrPJFj3eccuAIIJy"
+# Get the API key from the environment variable
+API_KEY = os.getenv('TICKETMASTER_API_KEY')
+#Define the URL of Ticketmaster API events
 ticketmaster_search_url = "https://app.ticketmaster.com/discovery/v2/events.json"
+
+#Search only the fashion events in the US
 search_params = {
     'apikey': API_KEY,
     'keyword': 'fashion',  
@@ -70,6 +78,8 @@ search_params = {
 response = requests.get(ticketmaster_search_url, params=search_params)
 
 ticketmaster_events = []
+
+#print the valid outputs
 if response.status_code == 200:
     events_data = response.json()
     
@@ -125,9 +135,9 @@ matched_df = pd.DataFrame(matched_data)
 matched_df.to_csv('matched_fashion_events.csv', index=False)
 print("Matched data saved to 'matched_fashion_events.csv'.")
 
-# ---------------------------
+
 # VISUALIZATION SECTION
-# ---------------------------
+
 
 # 1. Number of Events per City
 city_event_count = ticketmaster_df['city'].value_counts()
